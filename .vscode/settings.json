@@ -1,0 +1,7 @@
+{
+    "conventionalCommits.scopes": [
+        "tsconfig",
+        "gitignore",
+        "dependencies"
+    ]
+}
