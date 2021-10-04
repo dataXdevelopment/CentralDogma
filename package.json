@@ -5,6 +5,14 @@
     "eslint": "^7.32.0",
     "eslint-config-xo": "^0.38.0",
     "prettier": "2.4.1",
+    "ts-node-dev": "^1.1.8",
     "typescript": "^4.4.3"
+  },
+  "scripts": {
+    "watch": "tsnd --respawn lib/index.ts"
+  },
+  "dependencies": {
+    "apollo-server": "^3.3.0",
+    "graphql": "^15.6.0"
   }
 }
