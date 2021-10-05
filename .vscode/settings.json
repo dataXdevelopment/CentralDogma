@@ -3,6 +3,7 @@
         "tsconfig",
         "gitignore",
         "dependencies",
-        "src/index"
+        "src/index",
+        "readme"
     ]
 }
