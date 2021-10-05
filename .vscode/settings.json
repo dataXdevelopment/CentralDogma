@@ -2,6 +2,7 @@
     "conventionalCommits.scopes": [
         "tsconfig",
         "gitignore",
-        "dependencies"
+        "dependencies",
+        "src/index"
     ]
 }
