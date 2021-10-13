@@ -3,7 +3,7 @@ import { connect } from "amqplib";
 var q = "tasks";
 
 async function main() {
-  const connection = await connect("amqp://localhost");
+  const connection = await connect("amqp://rabbitmq");
   const channel = await connection.createChannel();
   await channel.assertQueue(q);
   channel.consume(q, function (msg) {

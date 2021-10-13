@@ -1,5 +1,5 @@
 import { ApolloServer, gql } from "apollo-server";
-import { Resolver, Resolvers } from "./generated/graphql";
+import { Resolvers } from "./generated/graphql";
 import { connect } from "amqplib";
 const typeDefs = gql`
   type Book {
@@ -50,7 +50,7 @@ const resolvers: Resolvers = {
 var q = "tasks";
 
 async function main() {
-  const connection = await connect("amqp://localhost");
+  const connection = await connect("amqp://rabbitmq");
   const channel = await connection.createChannel();
   await channel.assertQueue(q);
   // channel.;

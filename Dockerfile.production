@@ -1,0 +1,16 @@
+FROM node:alpine as builder
+WORKDIR /app
+COPY package.json .
+RUN npm install
+#RUN npm install --verbose
+RUN npm install typescript
+COPY . .
+RUN npx tsc
+
+FROM node:alpine
+WORKDIR /app
+COPY package.json ./
+RUN npm install --production
+COPY --from=builder /app/dist ./build
+EXPOSE 4000
+CMD ["node", "./build/index.js"]
