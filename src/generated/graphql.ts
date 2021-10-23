@@ -14,19 +14,13 @@ export type Scalars = {
   Float: number;
 };
 
-export type Book = {
-  __typename?: 'Book';
-  author?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
-  addReddit?: Maybe<Scalars['String']>;
+  addRedditScrapeRequest?: Maybe<ScrapeRequest>;
 };
 
 
-export type MutationAddRedditArgs = {
+export type MutationAddRedditScrapeRequestArgs = {
   comments?: Maybe<Scalars['Boolean']>;
   subreddits: Array<Maybe<Scalars['String']>>;
   threads?: Maybe<Scalars['Boolean']>;
@@ -34,8 +28,27 @@ export type MutationAddRedditArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  books?: Maybe<Array<Maybe<Book>>>;
+  scrapeLength?: Maybe<Scalars['Int']>;
 };
+
+export type ScrapeRequest = {
+  __typename?: 'ScrapeRequest';
+  data?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  returnType?: Maybe<ScrapeReturnType>;
+  status?: Maybe<ScrapeStatus>;
+};
+
+export enum ScrapeReturnType {
+  Csv = 'CSV',
+  Json = 'JSON'
+}
+
+export enum ScrapeStatus {
+  Completed = 'COMPLETED',
+  InProgress = 'IN_PROGRESS',
+  Pending = 'PENDING'
+}
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
@@ -107,39 +120,47 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Book: ResolverTypeWrapper<Book>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  ID: ResolverTypeWrapper<Scalars['ID']>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  ScrapeRequest: ResolverTypeWrapper<ScrapeRequest>;
+  ScrapeReturnType: ScrapeReturnType;
+  ScrapeStatus: ScrapeStatus;
   String: ResolverTypeWrapper<Scalars['String']>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  Book: Book;
   Boolean: Scalars['Boolean'];
+  ID: Scalars['ID'];
+  Int: Scalars['Int'];
   Mutation: {};
   Query: {};
+  ScrapeRequest: ScrapeRequest;
   String: Scalars['String'];
 }>;
 
-export type BookResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Book'] = ResolversParentTypes['Book']> = ResolversObject<{
-  author?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  addReddit?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationAddRedditArgs, 'subreddits'>>;
+  addRedditScrapeRequest?: Resolver<Maybe<ResolversTypes['ScrapeRequest']>, ParentType, ContextType, RequireFields<MutationAddRedditScrapeRequestArgs, 'subreddits'>>;
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  books?: Resolver<Maybe<Array<Maybe<ResolversTypes['Book']>>>, ParentType, ContextType>;
+  scrapeLength?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+}>;
+
+export type ScrapeRequestResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ScrapeRequest'] = ResolversParentTypes['ScrapeRequest']> = ResolversObject<{
+  data?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  returnType?: Resolver<Maybe<ResolversTypes['ScrapeReturnType']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['ScrapeStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
-  Book?: BookResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  ScrapeRequest?: ScrapeRequestResolvers<ContextType>;
 }>;
 

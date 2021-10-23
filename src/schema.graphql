@@ -1,0 +1,29 @@
+type Query {
+  scrapeLength: Int
+}
+
+type ScrapeRequest {
+  id: ID!
+  status: ScrapeStatus
+  returnType: ScrapeReturnType
+  data: String
+}
+
+enum ScrapeStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum ScrapeReturnType {
+  CSV
+  JSON
+}
+
+type Mutation {
+  addRedditScrapeRequest(
+    subreddits: [String]!
+    threads: Boolean
+    comments: Boolean
+  ): ScrapeRequest
+}

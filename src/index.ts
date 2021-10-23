@@ -1,66 +1,38 @@
+import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
+import { loadSchema, loadTypedefs } from "@graphql-tools/load";
+import { addResolversToSchema } from "@graphql-tools/schema";
 import { ApolloServer, gql } from "apollo-server";
-import { Resolvers } from "./generated/graphql";
-import { connect } from "amqplib";
-const typeDefs = gql`
-  type Book {
-    title: String
-    author: String
-  }
+import { Resolvers, ScrapeRequest } from "./generated/graphql";
+import { v4 as uuidv4 } from "uuid";
 
-  type Query {
-    books: [Book]
-  }
-
-  type Mutation {
-    addReddit(
-      subreddits: [String]!
-      threads: Boolean
-      comments: Boolean
-    ): String
-  }
-`;
-
-const books = [
-  {
-    title: "The Awakening",
-    author: "Kate Chopin",
-  },
-  {
-    title: "City of Glass",
-    author: "Paul Auster",
-  },
-];
+const responseList = [];
 
 const resolvers: Resolvers = {
   Query: {
-    books: () => books,
+    scrapeLength: () => responseList.length,
   },
   Mutation: {
-    addReddit: (_, args, context) => {
+    addRedditScrapeRequest: (_, args, context) => {
       console.log(args);
-      context.taskQueue.sendToQueue(
-        q,
-        Buffer.from(`Recieved args - ${JSON.stringify(args)}`)
-      );
-      return "Data";
+      const response: ScrapeRequest = {
+        id: uuidv4(),
+      };
+      responseList.push(response);
+      return response;
     },
   },
 };
 
-var q = "tasks";
-
 async function main() {
-  const connection = await connect("amqp://rabbitmq");
-  const channel = await connection.createChannel();
-  await channel.assertQueue(q);
-  // channel.;
+  const schema = await loadSchema("./src/schema.graphql", {
+    // load from a single schema file
+    loaders: [new GraphQLFileLoader()],
+  });
+
+  const schemaWithResolvers = addResolversToSchema(schema, resolvers);
 
   const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    context: ({ req }) => ({
-      taskQueue: channel,
-    }),
+    schema: schemaWithResolvers,
   });
 
   server.listen().then(({ url }) => {
