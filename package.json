@@ -7,8 +7,10 @@
     "@graphql-codegen/typescript-resolvers": "2.3.0",
     "@types/amqplib": "^0.8.2",
     "@types/graphql": "^14.5.0",
+    "@types/uuid": "^8.3.1",
     "@typescript-eslint/eslint-plugin": "^4.32.0",
     "@typescript-eslint/parser": "^4.32.0",
+    "concurrently": "^6.3.0",
     "eslint": "^7.32.0",
     "eslint-config-xo": "^0.38.0",
     "prettier": "2.4.1",
@@ -16,13 +18,18 @@
     "typescript": "^4.4.3"
   },
   "scripts": {
+    "dev": "concurrently npm:server npm:codegen-watch",
     "server": "tsnd --respawn src/index.ts",
     "reddit": "tsnd --respawn src/redditConsumer.ts",
-    "codegen": "graphql-codegen --config codegen.yml"
+    "codegen": "graphql-codegen --config codegen.yml",
+    "codegen-watch": "graphql-codegen --watch --config codegen.yml"
   },
   "dependencies": {
+    "@graphql-tools/graphql-file-loader": "^7.3.1",
+    "@graphql-tools/load": "^7.3.2",
     "amqplib": "^0.8.0",
     "apollo-server": "^3.3.0",
-    "graphql": "^15.6.0"
+    "graphql": "^15.6.0",
+    "uuid": "^8.3.2"
   }
 }

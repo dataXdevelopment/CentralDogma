@@ -3,7 +3,14 @@
         "tsconfig",
         "gitignore",
         "dependencies",
-        "src/index",
-        "readme"
-    ]
+        "readme",
+        "src",
+        "docker"
+    ],
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
 }

@@ -2,7 +2,11 @@ import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import { loadSchema, loadTypedefs } from "@graphql-tools/load";
 import { addResolversToSchema } from "@graphql-tools/schema";
 import { ApolloServer, gql } from "apollo-server";
-import { Resolvers, ScrapeRequest } from "./generated/graphql";
+import {
+  Resolvers,
+  ScrapeRequest,
+  ScrapeReturnType,
+} from "./generated/graphql";
 import { v4 as uuidv4 } from "uuid";
 
 const responseList = [];
