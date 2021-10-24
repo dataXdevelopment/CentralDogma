@@ -56,6 +56,16 @@ export enum ScrapeStatus {
   PENDING = 'PENDING'
 }
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  scrapeStatus?: Maybe<ScrapeRequest>;
+};
+
+
+export type SubscriptionScrapeStatusArgs = {
+  id: Scalars['ID'];
+};
+
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
 
@@ -135,6 +145,7 @@ export type ResolversTypes = ResolversObject<{
   ScrapeReturnType: ScrapeReturnType;
   ScrapeStatus: ScrapeStatus;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Subscription: ResolverTypeWrapper<{}>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -146,6 +157,7 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   ScrapeRequest: ScrapeRequest;
   String: Scalars['String'];
+  Subscription: {};
 }>;
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
@@ -165,9 +177,14 @@ export type ScrapeRequestResolvers<ContextType = Context, ParentType extends Res
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type SubscriptionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
+  scrapeStatus?: SubscriptionResolver<Maybe<ResolversTypes['ScrapeRequest']>, "scrapeStatus", ParentType, ContextType, RequireFields<SubscriptionScrapeStatusArgs, 'id'>>;
+}>;
+
 export type Resolvers<ContextType = Context> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   ScrapeRequest?: ScrapeRequestResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
 }>;
 

@@ -28,3 +28,7 @@ type Mutation {
     comments: Boolean
   ): ScrapeRequest
 }
+
+type Subscription {
+  scrapeStatus(id: ID!): ScrapeRequest
+}
