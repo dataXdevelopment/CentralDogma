@@ -8,3 +8,5 @@ generates:
     config:
       contextType: ../context#Context
       useIndexSignature: true
+      namingConvention:
+        enumValues: "change-case#upperCase"
