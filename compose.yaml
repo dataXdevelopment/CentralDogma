@@ -22,3 +22,11 @@ services:
     image: rabbitmq:3.9-management
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+  redis:
+    image: "redis:latest"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+  redis-insight:
+    image: "redislabs/redisinsight:latest"
+    ports:
+      - 8001:8001

@@ -6,22 +6,35 @@ import {
   Resolvers,
   ScrapeRequest,
   ScrapeReturnType,
+  ScrapeStatus,
 } from "./generated/graphql";
 import { v4 as uuidv4 } from "uuid";
+import Redis from "ioredis";
 
 const responseList = [];
+const redis = new Redis({
+  port: 6379,
+  host: "redis",
+});
 
 const resolvers: Resolvers = {
   Query: {
     scrapeLength: () => responseList.length,
+    scrapeStatus: async (_, { id }) => {
+      const response = (await redis.hgetall(id)) as ScrapeRequest;
+      return response;
+    },
   },
   Mutation: {
     addRedditScrapeRequest: (_, args, context) => {
       console.log(args);
-      const response: ScrapeRequest = {
+      const response = {
         id: uuidv4(),
+        returnType: ScrapeReturnType.JSON,
+        status: ScrapeStatus.PENDING,
       };
       responseList.push(response);
+      redis.hset(response.id, response);
       return response;
     },
   },
