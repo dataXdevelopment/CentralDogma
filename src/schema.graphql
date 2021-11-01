@@ -5,12 +5,12 @@ type Query {
 
 type ScrapeRequest {
   id: ID!
-  status: ScrapeStatus
+  status: ScrapeStatusType
   returnType: ScrapeReturnType
   data: String
 }
 
-enum ScrapeStatus {
+enum ScrapeStatusType {
   PENDING
   IN_PROGRESS
   COMPLETED
@@ -22,11 +22,7 @@ enum ScrapeReturnType {
 }
 
 type Mutation {
-  addRedditScrapeRequest(
-    subreddits: [String]!
-    threads: Boolean
-    comments: Boolean
-  ): ScrapeRequest
+  addMetaCriticScrapeRequest(url: String!): ScrapeRequest
 }
 
 type Subscription {

@@ -8,13 +8,15 @@ import {
   Resolvers,
   ScrapeRequest,
   ScrapeReturnType,
-  ScrapeStatus,
+  ScrapeStatusType,
 } from "./generated/graphql";
 import { v4 as uuidv4 } from "uuid";
 import Redis from "ioredis";
 import { execute, subscribe } from "graphql";
 import { SubscriptionServer } from "subscriptions-transport-ws";
 import { RedisPubSub } from "graphql-redis-subscriptions";
+import { createClient } from "celery-node";
+
 const responseList = [];
 const options = {
   port: 6379,
@@ -38,15 +40,21 @@ const resolvers: Resolvers = {
     },
   },
   Mutation: {
-    addRedditScrapeRequest: (_, args, context) => {
+    addMetaCriticScrapeRequest: (_, args, context) => {
       console.log(args);
       const response = {
         id: uuidv4(),
         returnType: ScrapeReturnType.JSON,
-        status: ScrapeStatus.PENDING,
+        status: ScrapeStatusType.PENDING,
       };
       responseList.push(response);
       redis.hset(response.id, response);
+      const client = createClient("redis://redis", "redis://redis");
+      const task = client.createTask("tasks.scrape");
+      const x = task.applyAsync([args.url, response.id]);
+      // Promise.all([
+      //   task.applyAsync([args.url, response.id]).get().then(console.log),
+      // ]).then(() => client.disconnect());
       return response;
     },
   },

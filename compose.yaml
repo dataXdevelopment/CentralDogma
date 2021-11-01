@@ -8,22 +8,22 @@ services:
       - 4000:4000
     volumes:
       - ./:/app
-    command: ["./.wait-for-it.sh", "rabbitmq:15672", "--", "npm", "run", "dev"]
-  # reddit:
-  #   build:
-  #     context: .
-  #   volumes:
-  #     - ./:/app
-  #   depends_on:
-  #     - rabbitmq
-  #   command:
-  #     ["./.wait-for-it.sh", "rabbitmq:15672", "--", "npm", "run", "reddit"]
+    command: ["./.wait-for-it.sh", "redis:5672", "--", "npm", "run", "dev"]
+  metacritic_worker:
+    image: "metacritic_worker:v0.1"
   rabbitmq:
-    image: rabbitmq:3.9-management
-    healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+    image: "rabbitmq:3.9-management"
+    ports:
+      - 5672:5672
+  selenium_grid:
+    image: "selenium/standalone-firefox:4.0.0-20211025"
+    ports:
+      - 4444:4444
+    shm_size: "2g"
   redis:
     image: "redis:latest"
+    ports:
+      - 6379:6379
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
   redis-insight:

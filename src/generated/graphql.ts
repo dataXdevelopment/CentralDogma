@@ -16,14 +16,12 @@ export type Scalars = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addRedditScrapeRequest?: Maybe<ScrapeRequest>;
+  addMetaCriticScrapeRequest?: Maybe<ScrapeRequest>;
 };
 
 
-export type MutationAddRedditScrapeRequestArgs = {
-  comments?: Maybe<Scalars['Boolean']>;
-  subreddits: Array<Maybe<Scalars['String']>>;
-  threads?: Maybe<Scalars['Boolean']>;
+export type MutationAddMetaCriticScrapeRequestArgs = {
+  url: Scalars['String'];
 };
 
 export type Query = {
@@ -42,7 +40,7 @@ export type ScrapeRequest = {
   data?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   returnType?: Maybe<ScrapeReturnType>;
-  status?: Maybe<ScrapeStatus>;
+  status?: Maybe<ScrapeStatusType>;
 };
 
 export enum ScrapeReturnType {
@@ -50,7 +48,7 @@ export enum ScrapeReturnType {
   JSON = 'JSON'
 }
 
-export enum ScrapeStatus {
+export enum ScrapeStatusType {
   COMPLETED = 'COMPLETED',
   IN_PROGRESS = 'IN_PROGRESS',
   PENDING = 'PENDING'
@@ -143,7 +141,7 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   ScrapeRequest: ResolverTypeWrapper<ScrapeRequest>;
   ScrapeReturnType: ScrapeReturnType;
-  ScrapeStatus: ScrapeStatus;
+  ScrapeStatusType: ScrapeStatusType;
   String: ResolverTypeWrapper<Scalars['String']>;
   Subscription: ResolverTypeWrapper<{}>;
 }>;
@@ -161,7 +159,7 @@ export type ResolversParentTypes = ResolversObject<{
 }>;
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  addRedditScrapeRequest?: Resolver<Maybe<ResolversTypes['ScrapeRequest']>, ParentType, ContextType, RequireFields<MutationAddRedditScrapeRequestArgs, 'subreddits'>>;
+  addMetaCriticScrapeRequest?: Resolver<Maybe<ResolversTypes['ScrapeRequest']>, ParentType, ContextType, RequireFields<MutationAddMetaCriticScrapeRequestArgs, 'url'>>;
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -173,7 +171,7 @@ export type ScrapeRequestResolvers<ContextType = Context, ParentType extends Res
   data?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   returnType?: Resolver<Maybe<ResolversTypes['ScrapeReturnType']>, ParentType, ContextType>;
-  status?: Resolver<Maybe<ResolversTypes['ScrapeStatus']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['ScrapeStatusType']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
