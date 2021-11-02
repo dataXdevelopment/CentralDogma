@@ -5,6 +5,7 @@ type Query {
 
 type ScrapeRequest {
   id: ID!
+  task: MetaCriticScrapeTask
   status: ScrapeStatusType
   returnType: ScrapeReturnType
   data: String
@@ -27,4 +28,8 @@ type Mutation {
 
 type Subscription {
   scrapeStatus(id: ID!): ScrapeRequest
+}
+
+type MetaCriticScrapeTask {
+  url: String
 }

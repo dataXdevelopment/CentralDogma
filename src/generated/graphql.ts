@@ -14,6 +14,11 @@ export type Scalars = {
   Float: number;
 };
 
+export type MetaCriticScrapeTask = {
+  __typename?: 'MetaCriticScrapeTask';
+  url?: Maybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addMetaCriticScrapeRequest?: Maybe<ScrapeRequest>;
@@ -41,6 +46,7 @@ export type ScrapeRequest = {
   id: Scalars['ID'];
   returnType?: Maybe<ScrapeReturnType>;
   status?: Maybe<ScrapeStatusType>;
+  task?: Maybe<MetaCriticScrapeTask>;
 };
 
 export enum ScrapeReturnType {
@@ -137,6 +143,7 @@ export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  MetaCriticScrapeTask: ResolverTypeWrapper<MetaCriticScrapeTask>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   ScrapeRequest: ResolverTypeWrapper<ScrapeRequest>;
@@ -151,11 +158,17 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'];
   ID: Scalars['ID'];
   Int: Scalars['Int'];
+  MetaCriticScrapeTask: MetaCriticScrapeTask;
   Mutation: {};
   Query: {};
   ScrapeRequest: ScrapeRequest;
   String: Scalars['String'];
   Subscription: {};
+}>;
+
+export type MetaCriticScrapeTaskResolvers<ContextType = Context, ParentType extends ResolversParentTypes['MetaCriticScrapeTask'] = ResolversParentTypes['MetaCriticScrapeTask']> = ResolversObject<{
+  url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
@@ -172,6 +185,7 @@ export type ScrapeRequestResolvers<ContextType = Context, ParentType extends Res
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   returnType?: Resolver<Maybe<ResolversTypes['ScrapeReturnType']>, ParentType, ContextType>;
   status?: Resolver<Maybe<ResolversTypes['ScrapeStatusType']>, ParentType, ContextType>;
+  task?: Resolver<Maybe<ResolversTypes['MetaCriticScrapeTask']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -180,6 +194,7 @@ export type SubscriptionResolvers<ContextType = Context, ParentType extends Reso
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
+  MetaCriticScrapeTask?: MetaCriticScrapeTaskResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   ScrapeRequest?: ScrapeRequestResolvers<ContextType>;
