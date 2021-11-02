@@ -16,7 +16,8 @@ import { execute, subscribe } from "graphql";
 import { SubscriptionServer } from "subscriptions-transport-ws";
 import { RedisPubSub } from "graphql-redis-subscriptions";
 import { createClient } from "celery-node";
-
+import { connect } from "amqplib";
+import { Context } from "./context";
 const responseList = [];
 const options = {
   port: 6379,
@@ -31,30 +32,31 @@ const pubsub = new RedisPubSub({
   subscriber: new Redis(options),
 });
 
+const q = "tasks.metacritic";
+
 const resolvers: Resolvers = {
   Query: {
     scrapeLength: () => responseList.length,
     scrapeStatus: async (_, { id }) => {
-      const response = (await redis.hgetall(id)) as ScrapeRequest;
+      const jsonResponse = (await redis.get(id)) ?? "{}";
+      const response = JSON.parse(jsonResponse);
       return response;
     },
   },
   Mutation: {
     addMetaCriticScrapeRequest: (_, args, context) => {
       console.log(args);
-      const response = {
+      const response: ScrapeRequest = {
         id: uuidv4(),
+        task: {
+          url: args.url,
+        },
         returnType: ScrapeReturnType.JSON,
         status: ScrapeStatusType.PENDING,
       };
       responseList.push(response);
-      redis.hset(response.id, response);
-      const client = createClient("redis://redis", "redis://redis");
-      const task = client.createTask("tasks.scrape");
-      const x = task.applyAsync([args.url, response.id]);
-      // Promise.all([
-      //   task.applyAsync([args.url, response.id]).get().then(console.log),
-      // ]).then(() => client.disconnect());
+      redis.set(response.id, JSON.stringify(response));
+      context.taskQueue.sendToQueue(q, Buffer.from(JSON.stringify(response)));
       return response;
     },
   },
@@ -71,10 +73,16 @@ async function main() {
   const schema = await loadSchema("./src/schema.graphql", {
     loaders: [new GraphQLFileLoader()],
   });
+  const connection = await connect("amqp://rabbitmq");
+  const channel = await connection.createChannel();
+  await channel.assertQueue(q);
 
   const schemaWithResolvers = addResolversToSchema(schema, resolvers);
   const server = new ApolloServer({
     schema: schemaWithResolvers,
+    context: (): Context => ({
+      taskQueue: channel,
+    }),
     plugins: [
       {
         async serverWillStart() {
