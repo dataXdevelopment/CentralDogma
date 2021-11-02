@@ -11,12 +11,18 @@ services:
     command: ["./.wait-for-it.sh", "redis:5672", "--", "npm", "run", "dev"]
   metacritic_worker:
     image: "metacritic_worker:v0.1"
+    volumes:
+      - ../SEELE/:/app
+    command: ["npx", "nodemon", "workers/meta_critic.py"]
+    environment:
+      - PYTHONPATH=/app
   rabbitmq:
     image: "rabbitmq:3.9-management"
     ports:
       - 5672:5672
+      - 15672:15672
   selenium_grid:
-    image: "selenium/standalone-firefox:4.0.0-20211025"
+    image: "selenium/standalone-chrome:latest"
     ports:
       - 4444:4444
     shm_size: "2g"
@@ -26,7 +32,7 @@ services:
       - 6379:6379
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
-  redis-insight:
-    image: "redislabs/redisinsight:latest"
-    ports:
-      - 8001:8001
+  # redis-insight:
+  #   image: "redislabs/redisinsight:latest"
+  #   ports:
+  #     - 8001:8001
