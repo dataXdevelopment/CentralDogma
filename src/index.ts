@@ -63,7 +63,8 @@ const resolvers: Resolvers = {
   },
   Subscription: {
     scrapeStatus: {
-      subscribe: () => pubsub.asyncIterator(["POST_CREATED"]),
+      subscribe: (_, args) =>
+        pubsub.asyncIterator([`tasks.metacritic.results.${args.id}`]),
     },
   },
 };

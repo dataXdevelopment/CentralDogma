@@ -44,6 +44,7 @@ export type ScrapeRequest = {
   __typename?: 'ScrapeRequest';
   data?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  percentage?: Maybe<Scalars['Int']>;
   returnType?: Maybe<ScrapeReturnType>;
   status?: Maybe<ScrapeStatusType>;
   task?: Maybe<MetaCriticScrapeTask>;
@@ -183,6 +184,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
 export type ScrapeRequestResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ScrapeRequest'] = ResolversParentTypes['ScrapeRequest']> = ResolversObject<{
   data?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  percentage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   returnType?: Resolver<Maybe<ResolversTypes['ScrapeReturnType']>, ParentType, ContextType>;
   status?: Resolver<Maybe<ResolversTypes['ScrapeStatusType']>, ParentType, ContextType>;
   task?: Resolver<Maybe<ResolversTypes['MetaCriticScrapeTask']>, ParentType, ContextType>;

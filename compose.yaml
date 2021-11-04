@@ -17,6 +17,7 @@ services:
     command: ["npx", "nodemon", "workers/meta_critic.py"]
     environment:
       - PYTHONPATH=/app
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/service-account.json
   rabbitmq:
     image: "rabbitmq:3.9-management"
     ports:
