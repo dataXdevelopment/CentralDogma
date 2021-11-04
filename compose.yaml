@@ -8,10 +8,11 @@ services:
       - 4000:4000
     volumes:
       - ./:/app
-    command: ["./.wait-for-it.sh", "redis:5672", "--", "npm", "run", "dev"]
+    command: ["./.wait-for-it.sh", "rabbitmq:15672", "--", "npm", "run", "dev"]
   metacritic_worker:
     image: "metacritic_worker:v0.1"
     volumes:
+      # Point to the location of SEELE workspace
       - ../SEELE/:/app
     command: ["npx", "nodemon", "workers/meta_critic.py"]
     environment:
@@ -32,7 +33,13 @@ services:
       - 6379:6379
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
-  # redis-insight:
-  #   image: "redislabs/redisinsight:latest"
-  #   ports:
-  #     - 8001:8001
+  redis-insight:
+    image: "redislabs/redisinsight:latest"
+    volumes:
+      - redis-insight-data:/db
+    ports:
+      - 8001:8001
+
+volumes:
+  redis-insight-data:
+    external: false

@@ -15,7 +15,6 @@ import Redis from "ioredis";
 import { execute, subscribe } from "graphql";
 import { SubscriptionServer } from "subscriptions-transport-ws";
 import { RedisPubSub } from "graphql-redis-subscriptions";
-import { createClient } from "celery-node";
 import { connect } from "amqplib";
 import { Context } from "./context";
 const responseList = [];
@@ -32,7 +31,7 @@ const pubsub = new RedisPubSub({
   subscriber: new Redis(options),
 });
 
-const q = "tasks.metacritic";
+const q = "tasks.metacritic.requests";
 
 const resolvers: Resolvers = {
   Query: {
@@ -56,7 +55,9 @@ const resolvers: Resolvers = {
       };
       responseList.push(response);
       redis.set(response.id, JSON.stringify(response));
-      context.taskQueue.sendToQueue(q, Buffer.from(JSON.stringify(response)));
+      context.taskQueue.sendToQueue(q, Buffer.from(JSON.stringify(response)), {
+        persistent: true,
+      });
       return response;
     },
   },
@@ -75,7 +76,7 @@ async function main() {
   });
   const connection = await connect("amqp://rabbitmq");
   const channel = await connection.createChannel();
-  await channel.assertQueue(q);
+  await channel.assertQueue(q, { durable: true });
 
   const schemaWithResolvers = addResolversToSchema(schema, resolvers);
   const server = new ApolloServer({

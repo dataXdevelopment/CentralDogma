@@ -6,7 +6,6 @@
     "amqplib": "^0.8.0",
     "apollo-server-core": "^3.4.0",
     "apollo-server-express": "^3.4.0",
-    "celery-node": "^0.5.7",
     "express": "^4.17.1",
     "graphql": "^15.6.1",
     "graphql-redis-subscriptions": "^2.4.0",
@@ -36,7 +35,6 @@
   "scripts": {
     "dev": "concurrently npm:server npm:codegen-watch",
     "server": "tsnd --respawn src/index.ts",
-    "reddit": "tsnd --respawn src/redditConsumer.ts",
     "codegen": "graphql-codegen --config codegen.yml",
     "codegen-watch": "graphql-codegen --watch --config codegen.yml"
   }
