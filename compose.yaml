@@ -9,12 +9,16 @@ services:
     volumes:
       - ./:/app
     command: ["./.wait-for-it.sh", "rabbitmq:15672", "--", "npm", "run", "dev"]
+  # Requires CentralCodgma and SEELE to be in a shared folder
   metacritic_worker:
-    image: "metacritic_worker:v0.1"
+    build:
+      context: ../SEELE/
     volumes:
       # Point to the location of SEELE workspace
       - ../SEELE/:/app
     command: ["npx", "nodemon", "workers/meta_critic.py"]
+    deploy:
+      replicas: 3
     environment:
       - PYTHONPATH=/app
       - GOOGLE_APPLICATION_CREDENTIALS=/app/service-account.json
@@ -34,6 +38,7 @@ services:
       - 6379:6379
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
+  # Only needed to debug redis and thus can be commented out
   redis-insight:
     image: "redislabs/redisinsight:latest"
     volumes:
